@@ -8,6 +8,8 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
 
+#include <algorithm>
+#include <cctype>
 #include <cstring>
 #include <string>
  
@@ -17,10 +19,30 @@ int
 main (int argc, char *argv[])
 {
   std::string config = "./scratch/proj-2/spq-config.xml";
+  std::string mode = "SPQ";
 
   CommandLine cmd (__FILE__);
-  cmd.AddValue("config", "Path to config file for SPQ", config);
+  cmd.AddValue("config", "Path of the config file", config);
+  cmd.AddValue("mode", "QoS mechanism to simulate", mode);
   cmd.Parse (argc, argv);
+
+  std::transform(mode.begin(), mode.end(), mode.begin(), [](unsigned char c){ return std::tolower(c); });
+
+  Ptr<DiffServ> queue;
+  if (mode == "spq")
+  {
+    queue = Create<Spq>();
+  }
+  else if (mode == "drr")
+  {
+    queue = Create<Drr>();
+  }
+  else
+  {
+    return 1;
+  }
+
+  queue->LoadConfig(config.c_str());
   
   Time::SetResolution (Time::NS);
 
@@ -37,7 +59,7 @@ main (int argc, char *argv[])
   devicesCR = pointToPointCR.Install (nodes.Get(0), nodes.Get(1));
   devicesRS = pointToPointRS.Install (nodes.Get(1), nodes.Get(2));
 
-  pointToPointCR.EnablePcapAll ("drr-simulation");
+  pointToPointCR.EnablePcapAll (mode + "-simulation");
 
   InternetStackHelper stack;
   stack.Install (nodes);
@@ -48,46 +70,6 @@ main (int argc, char *argv[])
   address.SetBase ("10.1.2.0", "255.255.255.0");
   Ipv4InterfaceContainer interfacesRS = address.Assign (devicesRS);
 
-  // TrafficClass* class1 = new TrafficClass();
-  // Filter* filter1 = new Filter();
-  // DestinationPortNumber* destPort1 = new DestinationPortNumber(10000);
-  // filter1->AddElement(destPort1);
-  // class1->m_filters.push_back(filter1);
-  // class1->SetMaxPackets(10000);
-  // class1->SetWeight(1024);
-  // class1->SetPriorityLevel(2);
-  // class1->SetDefault(false);
-
-  // TrafficClass* class2 = new TrafficClass();
-  // Filter* filter2 = new Filter();
-  // DestinationPortNumber* destPort2 = new DestinationPortNumber(20000);
-  // filter2->AddElement(destPort2);
-  // class2->m_filters.push_back(filter2);
-  // class2->SetMaxPackets(10000);
-  // class2->SetWeight(1024);
-  // class2->SetPriorityLevel(1);
-  // class2->SetDefault(false);
-
-  // TrafficClass* class3 = new TrafficClass();
-  // Filter* filter3 = new Filter();
-  // DestinationPortNumber* destPort3 = new DestinationPortNumber(30000);
-  // filter3->AddElement(destPort3);
-  // class3->m_filters.push_back(filter3);
-  // class3->SetMaxPackets(10000);
-  // class3->SetWeight(1024);
-  // class3->SetPriorityLevel(1);
-  // class3->SetDefault(true);
-
-  Ptr<Spq> queue = Create<Spq>();
-  queue->LoadConfig(config.c_str());
-  // queue->AddClass(class1);
-  // queue->AddClass(class2);
-
-  // Ptr<Drr> queue = Create<Drr>();
-  // queue->AddClass(class1);
-  // queue->AddClass(class2);
-  // queue->AddClass(class3);
-
   Ptr<ns3::PointToPointNetDevice> p2pDeviceCR = DynamicCast<ns3::PointToPointNetDevice>(nodes.Get(1)->GetDevice(0));
   p2pDeviceCR->SetQueue(queue);
   Ptr<ns3::PointToPointNetDevice> p2pDeviceRS = DynamicCast<ns3::PointToPointNetDevice>(nodes.Get(1)->GetDevice(1));
@@ -96,44 +78,67 @@ main (int argc, char *argv[])
   PacketSinkHelper sink1 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), 10000));
   ApplicationContainer serverApps1 = sink1.Install (nodes.Get (2));
   serverApps1.Start (Seconds (1.0));
-  serverApps1.Stop (Seconds (20.0));
+  serverApps1.Stop (Seconds (10.0));
 
   PacketSinkHelper sink2 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), 20000));
   ApplicationContainer serverApps2 = sink2.Install (nodes.Get (2));
   serverApps2.Start (Seconds (1.0));
-  serverApps2.Stop (Seconds (20.0));
+  serverApps2.Stop (Seconds (5.0));
 
-  // PacketSinkHelper sink3 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), 30000));
-  // ApplicationContainer serverApps3 = sink3.Install (nodes.Get (2));
-  // serverApps3.Start (Seconds (1.0));
-  // serverApps3.Stop (Seconds (20.0));
+  PacketSinkHelper sink3 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), 30000));
+  ApplicationContainer serverApps3 = sink3.Install (nodes.Get (2));
+  serverApps3.Start (Seconds (1.0));
+  serverApps3.Stop (Seconds (5.0));
 
-  UdpClientHelper client1 (interfacesRS.GetAddress (1), 10000);
-  client1.SetAttribute ("MaxPackets", UintegerValue (10000));
-  client1.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
-  client1.SetAttribute ("PacketSize", UintegerValue (1024));
+  if (mode == "spq")
+  {
+    UdpClientHelper client1 (interfacesRS.GetAddress (1), 10000);
+    client1.SetAttribute ("MaxPackets", UintegerValue (10000));
+    client1.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
+    client1.SetAttribute ("PacketSize", UintegerValue (1024));
 
-  UdpClientHelper client2 (interfacesRS.GetAddress (1), 20000);
-  client2.SetAttribute ("MaxPackets", UintegerValue (10000));
-  client2.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
-  client2.SetAttribute ("PacketSize", UintegerValue (1024));
+    UdpClientHelper client2 (interfacesRS.GetAddress (1), 20000);
+    client2.SetAttribute ("MaxPackets", UintegerValue (10000));
+    client2.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
+    client2.SetAttribute ("PacketSize", UintegerValue (1024));
 
-  // UdpClientHelper client3 (interfacesRS.GetAddress (1), 30000);
-  // client3.SetAttribute ("MaxPackets", UintegerValue (10000));
-  // client3.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
-  // client3.SetAttribute ("PacketSize", UintegerValue (1024));
+    ApplicationContainer clientApps1 = client1.Install (nodes.Get (0));
+    clientApps1.Start (Seconds (3.0));
+    clientApps1.Stop (Seconds (4.0));
 
-  ApplicationContainer clientApps1 = client1.Install (nodes.Get (0));
-  clientApps1.Start (Seconds (4.0));
-  clientApps1.Stop (Seconds (5.0));
+    ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
+    clientApps2.Start (Seconds (2.0));
+    clientApps2.Stop (Seconds (4.0));
+  }
+  else
+  {
+    UdpClientHelper client1 (interfacesRS.GetAddress (1), 10000);
+    client1.SetAttribute ("MaxPackets", UintegerValue (10000));
+    client1.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
+    client1.SetAttribute ("PacketSize", UintegerValue (1024));
 
-  ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
-  clientApps2.Start (Seconds (3.0));
-  clientApps2.Stop (Seconds (5.0));
+    UdpClientHelper client2 (interfacesRS.GetAddress (1), 20000);
+    client2.SetAttribute ("MaxPackets", UintegerValue (10000));
+    client2.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
+    client2.SetAttribute ("PacketSize", UintegerValue (1024));
 
-  // ApplicationContainer clientApps3 = client3.Install (nodes.Get (0));
-  // clientApps3.Start (Seconds (3.0));
-  // clientApps3.Stop (Seconds (5.0));
+    UdpClientHelper client3 (interfacesRS.GetAddress (1), 30000);
+    client3.SetAttribute ("MaxPackets", UintegerValue (10000));
+    client3.SetAttribute ("Interval", TimeValue (MilliSeconds (1.0)));
+    client3.SetAttribute ("PacketSize", UintegerValue (1024));
+
+    ApplicationContainer clientApps1 = client1.Install (nodes.Get (0));
+    clientApps1.Start (Seconds (3.0));
+    clientApps1.Stop (Seconds (4.0));
+
+    ApplicationContainer clientApps2 = client2.Install (nodes.Get (0));
+    clientApps2.Start (Seconds (3.0));
+    clientApps2.Stop (Seconds (4.0));
+
+    ApplicationContainer clientApps3 = client3.Install (nodes.Get (0));
+    clientApps3.Start (Seconds (3.0));
+    clientApps3.Stop (Seconds (4.0));
+  }
 
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
