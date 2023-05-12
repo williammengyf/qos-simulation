@@ -7,20 +7,37 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 DestinationPortNumber::DestinationPortNumber()
     : m_port(0)
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param port Expected destination port number.
+*/
 DestinationPortNumber::DestinationPortNumber(uint16_t port)
     : m_port(port)
 {
 }
 
+/**
+ * Destructor.
+*/
 DestinationPortNumber::~DestinationPortNumber()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 DestinationPortNumber::Match(Ptr<Packet> p)
 {
@@ -54,4 +71,4 @@ DestinationPortNumber::Match(Ptr<Packet> p)
     return destPort == static_cast<uint16_t>(m_port);
 }
 
-}
+} // namespace ns3

@@ -8,6 +8,9 @@
 namespace ns3
 {
 
+/**
+ * Filter element for destination IP address.
+*/
 class DestinationIpAddress : public FilterElement
 {
 public:
@@ -20,6 +23,6 @@ private:
     Ipv4Address m_address;
 };
 
-}
+} // namespace ns3
 
 #endif

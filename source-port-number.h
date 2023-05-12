@@ -7,6 +7,9 @@
 namespace ns3
 {
 
+/**
+ * Filter element for source port number.
+*/
 class SourcePortNumber : public FilterElement
 {
 public:
@@ -19,6 +22,6 @@ private:
     uint32_t m_port;
 };
 
-}
+} // namespace ns3
 
 #endif

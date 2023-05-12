@@ -6,6 +6,9 @@
 namespace ns3
 {
 
+/**
+ * Queue with SPQ mechanism.
+*/
 class Spq : public DiffServ
 {
 public:

@@ -7,6 +7,9 @@
 namespace ns3
 {
 
+/**
+ * Filter element for protocol number.
+*/
 class ProtocolNumber : public FilterElement
 {
 public:
@@ -19,6 +22,6 @@ private:
     uint32_t m_protocol;
 };
 
-}
+} // namespace ns3
 
 #endif

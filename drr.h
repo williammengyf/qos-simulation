@@ -6,6 +6,9 @@
 namespace ns3
 {
 
+/**
+ * Queue with DRR mechanism.
+*/
 class Drr : public DiffServ
 {
 public:

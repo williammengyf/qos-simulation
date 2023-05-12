@@ -4,22 +4,40 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 SourceMask::SourceMask()
     : m_address(),
       m_mask()
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param address Expected source IP address.
+ * \param mask Expected source IP mask.
+*/
 SourceMask::SourceMask(const char* address, const char* mask)
     : m_address(address),
       m_mask(mask)
 {
 }
 
+/**
+ * Destructor.
+*/
 SourceMask::~SourceMask()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 SourceMask::Match(Ptr<Packet> p)
 {
@@ -35,4 +53,4 @@ SourceMask::Match(Ptr<Packet> p)
     return m_mask.IsMatch(m_address, srcIpAddress);
 }
 
-}
+} // namespace ns3

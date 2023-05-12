@@ -4,20 +4,37 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 ProtocolNumber::ProtocolNumber()
     : m_protocol(0)
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param protocol Expected protocol number.
+*/
 ProtocolNumber::ProtocolNumber(uint8_t protocol)
     : m_protocol(protocol)
 {
 }
 
+/**
+ * Destructor.
+*/
 ProtocolNumber::~ProtocolNumber()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 ProtocolNumber::Match(Ptr<Packet> p)
 {
@@ -33,4 +50,4 @@ ProtocolNumber::Match(Ptr<Packet> p)
     return protocol == static_cast<uint8_t>(m_protocol);
 }
 
-}
+} // namespace ns3

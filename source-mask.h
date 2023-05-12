@@ -8,6 +8,9 @@
 namespace ns3
 {
 
+/**
+ * Filter element for source mask.
+*/
 class SourceMask : public FilterElement
 {
 public:
@@ -21,6 +24,6 @@ private:
     Ipv4Mask m_mask;
 };
 
-}
+} // namespace ns3
 
 #endif

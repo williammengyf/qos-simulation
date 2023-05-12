@@ -23,11 +23,17 @@
 namespace ns3
 {
 
+/**
+ * Constructor.
+*/
 DiffServ::DiffServ()
     : Queue<Packet>()
 {
 }
 
+/**
+ * Destructor.
+*/
 DiffServ::~DiffServ()
 {
     for (TrafficClass* trafficClass : q_class)
@@ -36,6 +42,12 @@ DiffServ::~DiffServ()
     }
 }
 
+/**
+ * Loads config from file.
+ * 
+ * \param filename Config file.
+ * \returns True if succeeded.
+*/
 bool
 DiffServ::LoadConfig(const char* filename)
 {
@@ -239,12 +251,23 @@ DiffServ::LoadConfig(const char* filename)
     return true;
 }
 
+/**
+ * Places a packet into the queue.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if succeeded.
+*/
 bool
 DiffServ::Enqueue(Ptr<Packet> p)
 {
     return DoEnqueue(p);
 }
 
+/**
+ * Removes a packet from the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 DiffServ::Dequeue()
 {
@@ -252,6 +275,11 @@ DiffServ::Dequeue()
     return p;
 }
 
+/**
+ * Removes and drops a packet from the queue.
+ * 
+ * \returns Pointer to the packet. 
+*/
 Ptr<Packet>
 DiffServ::Remove()
 {
@@ -259,18 +287,34 @@ DiffServ::Remove()
     return p;
 }
 
+/**
+ * Retrieves, but does not remove a packet from the queue.
+ * 
+ * \returns Poniter to the packet.
+*/
 Ptr<const Packet>
 DiffServ::Peek() const
 {
     return DoPeek();
 }
 
+/**
+ * Adds a traffic class to the queue.
+ * 
+ * \param trafficClass Pointer to the traffic class.
+*/
 void
 DiffServ::AddClass(TrafficClass* trafficClass)
 {
     q_class.push_back(trafficClass);
 }
 
+/**
+ * Determines which traffic class a packet will be placed.
+ * 
+ * \param p Pointer to the packet.
+ * \returns Index of the traffic class.
+*/
 uint32_t
 DiffServ::Classify(Ptr<Packet> p)
 {
@@ -282,7 +326,8 @@ DiffServ::Classify(Ptr<Packet> p)
     copy->RemoveHeader(iph);
     copy->RemoveHeader(udph);
     uint32_t index = 0;
-    uint32_t defaultIndex = q_class.size(); // if there is no matched or default traffic class, drop the packet
+    // If there is no matched or default traffic class, drop the packet.
+    uint32_t defaultIndex = q_class.size();
     for (TrafficClass* trafficClass : q_class)
     {
         if (trafficClass->Match(p))
@@ -300,6 +345,12 @@ DiffServ::Classify(Ptr<Packet> p)
     return defaultIndex;
 }
 
+/**
+ * Pushes a packet to the queue.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if succeeded.
+*/
 bool
 DiffServ::DoEnqueue(Ptr<Packet> p)
 {
@@ -319,6 +370,11 @@ DiffServ::DoEnqueue(Ptr<Packet> p)
     return success;
 }
 
+/**
+ * Pulls a packet from the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 DiffServ::DoDequeue()
 {
@@ -326,6 +382,11 @@ DiffServ::DoDequeue()
     return p;
 }
 
+/**
+ * Drops a packet from the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 DiffServ::DoRemove()
 {
@@ -338,6 +399,11 @@ DiffServ::DoRemove()
     return p;
 }
 
+/**
+ * Peeks a packet in the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<const Packet>
 DiffServ::DoPeek() const
 {

@@ -22,14 +22,16 @@
 
 using namespace ns3;
 
-uint8_t* zero_bytes(std::size_t size)
+uint8_t*
+zero_bytes(std::size_t size)
 {
     uint8_t* buffer = new uint8_t[size];
     std::memset(buffer, 0, size);
     return buffer;
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     TrafficClass* class1 = new TrafficClass();
     Filter* filter1 = new Filter();

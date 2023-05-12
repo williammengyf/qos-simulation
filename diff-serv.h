@@ -9,7 +9,10 @@
 
 namespace ns3
 {
-    
+
+/**
+ * Queue for differentiated services.
+*/
 class DiffServ : public Queue<Packet>
 {
 public:

@@ -2,10 +2,16 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 Filter::Filter()
 {
 }
 
+/**
+ * Destructor.
+*/
 Filter::~Filter()
 {
     for (FilterElement* element : m_elements)
@@ -14,12 +20,23 @@ Filter::~Filter()
     }
 }
 
+/**
+ * Adds a filter element to the filter.
+ * 
+ * \param element The filter element to add.
+*/
 void
 Filter::AddElement(FilterElement* element)
 {
     m_elements.push_back(element);
 }
 
+/**
+ * Determines if a packet matches all filter element of the filter.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches all filter elements of the filter.
+*/
 bool
 Filter::Match(Ptr<Packet> p)
 {
@@ -33,4 +50,4 @@ Filter::Match(Ptr<Packet> p)
     return true;
 }
 
-}
+} // namespace ns3

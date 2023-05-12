@@ -6,20 +6,37 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 SourcePortNumber::SourcePortNumber()
     : m_port(0)
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param port Expected source port number.
+*/
 SourcePortNumber::SourcePortNumber(uint16_t port)
     : m_port(port)
 {
 }
 
+/**
+ * Destructor.
+*/
 SourcePortNumber::~SourcePortNumber()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 SourcePortNumber::Match(Ptr<Packet> p)
 {
@@ -53,4 +70,4 @@ SourcePortNumber::Match(Ptr<Packet> p)
     return srcPort == static_cast<uint16_t>(m_port);
 }
 
-}
+} // namespace ns3

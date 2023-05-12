@@ -10,6 +10,9 @@
 namespace ns3
 {
 
+/**
+ * Queue of packets with characteristics.
+*/
 class TrafficClass
 {
 public:
@@ -48,6 +51,6 @@ private:
     bool m_isActive;
 };
 
-}
+} // namespace ns3
 
 #endif

@@ -6,6 +6,9 @@
 namespace ns3
 {
 
+/**
+ * Abstract class for filter elements.
+*/
 class FilterElement
 {
 public:
@@ -13,6 +16,6 @@ public:
     virtual bool Match(Ptr<Packet> p) = 0;
 };
 
-}
+} // namespace ns3
 
 #endif

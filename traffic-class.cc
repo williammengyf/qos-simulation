@@ -3,6 +3,9 @@
 namespace ns3
 {
 
+/**
+ * Constructor.
+*/
 TrafficClass::TrafficClass()
     : m_bytes(0),
       m_packets(0),
@@ -15,6 +18,9 @@ TrafficClass::TrafficClass()
 {
 }
 
+/**
+ * Destructor.
+*/
 TrafficClass::~TrafficClass()
 {
     for (Filter* filter : m_filters)
@@ -23,6 +29,12 @@ TrafficClass::~TrafficClass()
     }
 }
 
+/**
+ * Places a packet to the back of the queue.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if succeeded.
+*/
 bool
 TrafficClass::Enqueue(Ptr<Packet> p)
 {
@@ -38,6 +50,11 @@ TrafficClass::Enqueue(Ptr<Packet> p)
     return true;
 }
 
+/**
+ * Removes a packet from the front of the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 TrafficClass::Dequeue()
 {
@@ -54,6 +71,11 @@ TrafficClass::Dequeue()
     return p;
 }
 
+/**
+ * Retrieves, but does not remove a packet from the front of the queue.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<const Packet>
 TrafficClass::Peek() const
 {
@@ -65,6 +87,12 @@ TrafficClass::Peek() const
     return m_queue.front();
 }
 
+/**
+ * Determines if a packet matches any filter of the traffic class.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches any filter of the traffic class.
+*/
 bool
 TrafficClass::Match(Ptr<Packet> p)
 {
@@ -78,78 +106,143 @@ TrafficClass::Match(Ptr<Packet> p)
     return false;
 }
 
+/**
+ * Sets max packets of the traffic class.
+ * 
+ * \param maxPackets Max packets.
+*/
 void
 TrafficClass::SetMaxPackets(uint32_t maxPackets)
 {
     m_maxPackets = maxPackets;
 }
 
+/**
+ * Gets max packets of the traffic class.
+ * 
+ * \returns Max packets.
+*/
 uint32_t
 TrafficClass::GetMaxPackets()
 {
     return m_maxPackets;
 }
 
+/**
+ * Sets weight of the traffic class.
+ * 
+ * \param weight Weight.
+*/
 void
 TrafficClass::SetWeight(uint32_t weight)
 {
     m_weight = weight;
 }
 
+/**
+ * Gets weight of the traffic class.
+ * 
+ * \returns Weight of the traffic class.
+*/
 uint32_t
 TrafficClass::GetWeight()
 {
     return m_weight;
 }
 
+/**
+ * Sets priority level of the traffic class.
+ * 
+ * \param priorityLevel Priority level.
+*/
 void
 TrafficClass::SetPriorityLevel(uint32_t priorityLevel)
 {
     m_priorityLevel = priorityLevel;
 }
 
+/**
+ * Gets priority level of the traffic class.
+ * 
+ * \returns Priority level.
+*/
 uint32_t
 TrafficClass::GetPriorityLevel()
 {
     return m_priorityLevel;
 }
 
+/**
+ * Increases deficit counter of the traffic class.
+ * 
+ * \param quantum Quantum to add to the deficit counter.
+*/
 void
 TrafficClass::IncreaseDeficit(uint32_t quantum)
 {
     m_deficitCounter += quantum;
 }
 
+/**
+ * Decreases deficit counter of the traffic class.
+ * 
+ * \param bytes Bytes to subtract from the deficit counter.
+*/
 void
 TrafficClass::DecreaseDeficit(uint32_t bytes)
 {
     m_deficitCounter -= bytes;
 }
 
+/**
+ * Gets the dificit counter of the traffic class.
+ * 
+ * \returns Deficit Counter
+*/
 uint32_t
 TrafficClass::GetDeficitCounter()
 {
     return m_deficitCounter;
 }
 
+/**
+ * Sets if the traffic class is default.
+ * 
+ * \param isDefault If the traffic class is default.
+*/
 void
 TrafficClass::SetDefault(bool isDefault)
 {
     m_isDefault = isDefault;
 }
 
+/**
+ * Gets if the traffic class is default.
+ * 
+ * \returns True if the traffic class is default.
+*/
 bool
 TrafficClass::IsDefault()
 {
     return m_isDefault;
 }
 
+/**
+ * Sets if the traffic class is active.
+ * 
+ * \param isActive If the traffic class is active.
+*/
 void
 TrafficClass::SetActive(bool isActive)
 {
     m_isActive = isActive;
 }
 
+/**
+ * Gets if the traffic class is active.
+ * 
+ * \returns True if the traffic class is active.
+*/
 bool
 TrafficClass::IsActive()
 {

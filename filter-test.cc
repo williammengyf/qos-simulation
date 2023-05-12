@@ -17,7 +17,8 @@
 
 using namespace ns3;
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     Filter filter;
     SourceIpAddress* srcIp = new SourceIpAddress("10.1.1.1");

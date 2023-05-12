@@ -20,7 +20,8 @@
 
 using namespace ns3;
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     Spq* queue = new Spq();
     queue->LoadConfig("./scratch/proj-2/spq-config.xml");

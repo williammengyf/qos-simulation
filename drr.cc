@@ -1,18 +1,31 @@
 #include "drr.h"
 #include "traffic-class.h"
 
+#include <iostream>
+
 namespace ns3
 {
 
+/**
+ * Constructor.
+*/
 Drr::Drr()
     : DiffServ()
 {
 }
 
+/**
+ * Destructor.
+*/
 Drr::~Drr()
 {
 }
 
+/**
+ * Determines which traffic class to be served and retrieves a packet from it.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 Drr::Schedule()
 {
@@ -69,6 +82,11 @@ Drr::Schedule()
     return p;
 }
 
+/**
+ * Determines which traffic class to be served next.
+ * 
+ * \returns Index of the traffic class.
+*/
 uint32_t
 Drr::NextClass() const
 {

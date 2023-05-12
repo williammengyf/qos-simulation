@@ -4,15 +4,26 @@
 namespace ns3
 {
 
+/**
+ * Constructor.
+*/
 Spq::Spq()
     : DiffServ()
 {
 }
 
+/**
+ * Destructor.
+*/
 Spq::~Spq()
 {
 }
 
+/**
+ * Determines which traffic class to be served and retrieves a packet from it.
+ * 
+ * \returns Pointer to the packet.
+*/
 Ptr<Packet>
 Spq::Schedule()
 {
@@ -39,6 +50,11 @@ Spq::Schedule()
     return p;
 }
 
+/**
+ * Determines which traffic class to be served next.
+ * 
+ * \returns Index of the traffic class.
+*/
 uint32_t
 Spq::NextClass() const
 {

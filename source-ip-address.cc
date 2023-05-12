@@ -4,20 +4,37 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 SourceIpAddress::SourceIpAddress()
     : m_address()
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param address Expected source Ip address.
+*/
 SourceIpAddress::SourceIpAddress(const char* address)
     : m_address(address)
 {
 }
 
+/**
+ * Destructor.
+*/
 SourceIpAddress::~SourceIpAddress()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 SourceIpAddress::Match(Ptr<Packet> p)
 {
@@ -33,4 +50,4 @@ SourceIpAddress::Match(Ptr<Packet> p)
     return m_address == srcIpAddress;
 }
 
-}
+} // namespace ns3

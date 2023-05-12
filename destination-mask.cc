@@ -5,22 +5,40 @@
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 DestinationMask::DestinationMask()
     : m_address(),
       m_mask()
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param address Expected destination IP address.
+ * \param mask Expected destination IP mask.
+*/
 DestinationMask::DestinationMask(const char* address, const char* mask)
     : m_address(address),
       m_mask(mask)
 {
 }
 
+/**
+ * Destructor.
+*/
 DestinationMask::~DestinationMask()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 DestinationMask::Match(Ptr<Packet> p)
 {
@@ -36,4 +54,4 @@ DestinationMask::Match(Ptr<Packet> p)
     return m_mask.IsMatch(m_address, destIpAddress);
 }
 
-}
+} // namespace ns3

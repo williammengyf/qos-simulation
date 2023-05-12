@@ -9,6 +9,9 @@
 namespace ns3
 {
 
+/**
+ * Filter to classify packets.
+*/
 class Filter
 {
 public:
@@ -20,6 +23,6 @@ public:
     bool Match(Ptr<Packet> p);
 };
 
-}
+} // namespace ns3
 
 #endif

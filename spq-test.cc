@@ -20,7 +20,8 @@
 
 using namespace ns3;
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     TrafficClass* class1 = new TrafficClass();
     Filter* filter1 = new Filter();

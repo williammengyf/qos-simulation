@@ -1,24 +1,40 @@
 #include "destination-ip-address.h"
-
 #include "ns3/ipv4-header.h"
 #include "ns3/ppp-header.h"
 
 namespace ns3 {
 
+/**
+ * Constructor.
+*/
 DestinationIpAddress::DestinationIpAddress()
     : m_address()
 {
 }
 
+/**
+ * Constructor.
+ * 
+ * \param address Expected destination Ip address.
+*/
 DestinationIpAddress::DestinationIpAddress(const char* address)
     : m_address(address)
 {
 }
 
+/**
+ * Destructor.
+*/
 DestinationIpAddress::~DestinationIpAddress()
 {
 }
 
+/**
+ * Determines if a packet matches the filter element.
+ * 
+ * \param p Pointer to the packet.
+ * \returns True if the packet matches the filter element.
+*/
 bool
 DestinationIpAddress::Match(Ptr<Packet> p)
 {
@@ -34,4 +50,4 @@ DestinationIpAddress::Match(Ptr<Packet> p)
     return m_address == destIpAddress;
 }
 
-}
+} // namespace ns3
